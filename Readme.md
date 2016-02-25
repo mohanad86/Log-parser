@@ -2,7 +2,7 @@
 - Here you will find simple and complex python codes 
 
 - python codes 
-![alt text](python_640x400.png)
+![alt text](https://github.com/mohanad86/Log-parser/blob/master/images/python_640x400.png)
 
 	
 ### If you are using Unbntu platform
