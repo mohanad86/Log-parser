@@ -2,7 +2,7 @@
 - Here you will find simple and complex python codes 
 
 - python codes 
-![alt text](https://www.google.ee/imgres?imgurl=https://realpython.com/learn/python-first-steps/images/pythonlogo.jpg&imgrefurl=https://realpython.com/learn/python-first-steps&h=459&w=680&tbnid=vs0XwK4yzGzKUM:&docid=9bJ-KuIu2RSxoM&ei=EPLOVsHIAYKaygPJ8LTICw&tbm=isch&client=ubuntu&ved=0ahUKEwjBkNTo85LLAhUCjXIKHUk4DbkQMwgbKAEwAQ)
+![alt text](python_640x400.png)
 
 	
 ### If you are using Unbntu platform
