@@ -46,7 +46,6 @@ for filename in os.listdir(root):
                     break 
         except ValueError:
             pass 
-import os 
 from datetime import datetime
 def humanize(bytes):
     if bytes < 1024:
@@ -57,7 +56,6 @@ def humanize(bytes):
         return "%.1f MB" % (bytes / 1024.0 ** 2)
     else:
         return "%.1f GB" % (bytes / 1024.0 ** 3)
-files = []
 for filename in os.listdir("."):
     mode, inode, device, nlink, vid, gid, size, atime, mtime, ctime = os.stat(filename) 
     files.append((filename, datetime.fromtimestamp(mtime), size))
