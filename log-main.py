@@ -38,8 +38,10 @@ for filename in os.listdir(root):
         except ValueError:
             pass # This will do nothing, needed due to syntax
 
-print "Top 5 USERS", total 
+print "Top 5 USERS", total
+print "-----------------------"
 print "Total lines:", total
+print "-----------------------"
 print "TOP 5 PAGES", total
 result = urls.items()
 result.sort(key = lambda item:item[1], reverse=True)
