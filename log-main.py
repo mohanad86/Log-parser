@@ -40,8 +40,8 @@ for filename in os.listdir(root):
 
 print "Top 5 USERS", total 
 print "Total lines:", total
- 
-results = urls.items()
-results.sort(key = lambda item:item[1], reverse=True)
-for keyword, hits in results[:5]:
+print "TOP 5 PAGES", total
+result = urls.items()
+result.sort(key = lambda item:item[1], reverse=True)
+for keyword, hits in result[:5]:
     print keyword, "==>", hits, "(", hits * 100 / total, "%)"
