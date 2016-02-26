@@ -37,7 +37,8 @@ for filename in os.listdir(root):
                     break # Stop searching for other keywords
         except ValueError:
             pass # This will do nothing, needed due to syntax
- 
+
+print "Top 5 USERS", total 
 print "Total lines:", total
  
 results = urls.items()
