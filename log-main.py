@@ -4,7 +4,7 @@ import gzip
 import argparse
 import gzip
 parser = argparse.ArgumentParser(description='Apache2 log parser.')
-parser.add_argument('--path', help='Path to Apache2 log files', default="/home/malyhass/Documents")
+parser.add_argument('--path', help='Path to Apache2 log files', default="/home/mohanad")
 parser.add_argument('--top-urls', help="Find top URL-s", action='store_true')
 parser.add_argument('--geoip', help ="Resolve IP-s to country codes", action='store_true')
 parser.add_argument('--verbosity', help="Increase verbosity", action="store_true")
