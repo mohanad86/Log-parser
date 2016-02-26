@@ -1,5 +1,6 @@
 import os
 import urllib
+import gzip
 #this is the directory where is the log files locate,
 root = "/home/mohanad"
 
