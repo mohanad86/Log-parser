@@ -16,6 +16,7 @@ keywords = "Windows", "Linux", "OS X", "Ubuntu", "Googlebot", "bingbot", "Androi
 d = {} 
 urls = {}
 total = 0
+files = []
 for filename in os.listdir(root):
     if not filename.startswith("access.log"):
         print "Skipping unknown file:", filename
@@ -45,6 +46,8 @@ for filename in os.listdir(root):
                     break 
         except ValueError:
             pass 
+import os 
+from datetime import datetime
 def humanize(bytes):
     if bytes < 1024:
         return "%d B" % bytes
@@ -54,16 +57,25 @@ def humanize(bytes):
         return "%.1f MB" % (bytes / 1024.0 ** 2)
     else:
         return "%.1f GB" % (bytes / 1024.0 ** 3)
+files = []
 for filename in os.listdir("."):
     mode, inode, device, nlink, vid, gid, size, atime, mtime, ctime = os.stat(filename) 
-    
-print filename, humanize(size)
+    files.append((filename, datetime.fromtimestamp(mtime), size))
+files.sort(key = lambda(filename, dt, size):dt)
+
+for filename, dt, size in files:
+	print "*********************"
+    	print filename, dt, humanize(size)
+print "***********************"
+print "Newest file is:", files[-1][0]
+print "Oldesr file is:", files[0][0]
 print "***********************"
 print "Top 5 USERS", total
 print "***********************"
 print "Total lines:", total
 print "***********************"
 print "TOP 5 PAGES", total
+print "***********************"
 result = urls.items()
 result.sort(key = lambda item:item[1], reverse=True)
 for keyword, hits in result[:5]:
