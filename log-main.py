@@ -68,11 +68,11 @@ print "***********************"
 print "Newest file is:", files[-1][0]
 print "Oldesr file is:", files[0][0]
 print "***********************"
-print "Top 5 USERS", total
+print "Top 5 USERS =", total
 print "***********************"
-print "Total lines:", total
+print "Total lines =", total
 print "***********************"
-print "TOP 5 PAGES", total
+print "TOP 5 PAGES =", total
 print "***********************"
 result = urls.items()
 result.sort(key = lambda item:item[1], reverse=True)
