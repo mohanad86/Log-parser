@@ -39,6 +39,8 @@ for filename in os.listdir(root):
             method, path, protocol = request.split(" ")
             url = "http://enos.itcollege.ee" + urllib.unquote(path)
             source_ip,_,_, timestamp = source_timestamp.split(" ", 3)
+            cc = gi.country_code_by_addr(source_ip)
+            countries[cc] = countries.get(cc, 0) + 1
            # print "Request came from:", source_ip, "When:", timestamp
             if not ":" in source_ip:
                 ip_addresses[source_ip] = ip_addresses.get(source_ip, 0) + 1
