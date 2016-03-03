@@ -17,6 +17,7 @@ d = {}
 urls = {}
 total = 0
 files = []
+user = {}
 ip_addresses = {}
 for filename in os.listdir(root):
     if not filename.startswith("access.log"):
@@ -78,12 +79,9 @@ results = ip_addresses.items()
 results.sort(key = lambda item:item[1], reverse=True)
 for ip, hits in results[:5]:
     print ip, "==>", hits, "(", hits * 100 / total, "%)"
-print "***********************"
-print "Top 5 USERS =", total
-print "***********************"
+print "************************"
 print "Total lines =", total
 print "***********************"
-print "TOP 5 URL =", total
 result = urls.items()
 result.sort(key = lambda item:item[1], reverse=True)
 for keyword, hits in result[:5]:
