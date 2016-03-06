@@ -3,23 +3,23 @@ import urllib
 import gzip
 import argparse
 import gzip
-import GeoIP
-gi = GeoIP.open("GeoIP.dat", GeoIP.GEOIP_MEMORY_CACHE)
+#import GeoIP
+#gi = GeoIP.open("GeoIP.dat", GeoIP.GEOIP_MEMORY_CACHE)
 parser = argparse.ArgumentParser(description='Apache2 log parser.')
-parser.add_argument('--path', help='Path to Apache2 log files', default="/home/malyhass/logs")
+parser.add_argument('--path', help='Path to Apache2 log files', default="/home/mohanad")
 parser.add_argument('--top-urls', help="Find top URL-s", action='store_true')
 parser.add_argument('--geoip', help ="Resolve IP-s to country codes", default="/home/malyhass/GeoIP.dat")
 parser.add_argument('--verbosity', help="Increase verbosity", action="store_true")
 args = parser.parse_args()
 #this is the directory where is the log files locate,
-root = "/home/malyhass"
+root = "/home/mohanad"
 
 keywords = "Windows", "Linux", "OS X", "Ubuntu", "Googlebot", "bingbot", "Android", "YandexBot", "facebookexternalhit"
 d = {} 
 urls = {}
 total = 0
 files = []
-user = {}
+users = {}
 countries = {}
 ip_addresses = {}
 for filename in os.listdir(root):
@@ -39,12 +39,13 @@ for filename in os.listdir(root):
             method, path, protocol = request.split(" ")
             url = "http://enos.itcollege.ee" + urllib.unquote(path)
             source_ip,_,_, timestamp = source_timestamp.split(" ", 3)
-            cc = gi.country_code_by_addr(source_ip)
-            countries[cc] = countries.get(cc, 0) + 1
+            #cc = gi.country_code_by_addr(source_ip)
+            #countries[cc] = countries.get(cc, 0) + 1
            # print "Request came from:", source_ip, "When:", timestamp
             if not ":" in source_ip:
                 ip_addresses[source_ip] = ip_addresses.get(source_ip, 0) + 1
             try:
+		users[username] = users[username] + 1
                 urls[url] = urls[url] + 1
             except:
                 urls[url] = 1
@@ -91,3 +92,4 @@ result = urls.items()
 result.sort(key = lambda item:item[1], reverse=True)
 for keyword, hits in result[:5]:
     print keyword, "==>", hits, "(", hits * 100 / total, "%)"
+print "************************"
