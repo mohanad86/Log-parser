@@ -4,9 +4,12 @@ import gzip
 import argparse
 import gzip
 import GeoIP
+from jinja2 import Environment, FileSystemLoader
+env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)),trim_blocks=True)
+#print env.get_template("report.html").render(variavle="blah")
 gi = GeoIP.open("GeoIP.dat", GeoIP.GEOIP_MEMORY_CACHE)
 parser = argparse.ArgumentParser(description='Apache2 log parser.')
-parser.add_argument('--path', help='Path to Apache2 log files', default="/home/malyhass/logs")
+parser.add_argument('--path', help='Path to Apache2 log files', default="/home/malyhass/log-parser")
 parser.add_argument('--top-urls', help="Find top URL-s", action='store_true')
 parser.add_argument('--geoip', help ="Resolve IP-s to country codes", default="/home/malyhass/GeoIP.dat")
 parser.add_argument('--verbose', help="Increase verbosity", action="store_true")
@@ -106,6 +109,10 @@ for country_code, hits in countries.items():
         j.set("style", "fill:#" + hex(hits * 255 / max_hits)[2:] + "0000")
         for i in j.iterfind("{http://www.w3.org/2000/svg}path"):
             i.attrib.pop("class", "")
+user_bytes = sorted(user_bytes.items(), key = lambda item:item[1], reverse=True)
+import codecs
+with codecs.open("output.html", "w", encoding="utf-8") as fh: 
+	fh.write(env.get_template("report.html").render(locals()))
  
 with open("highlighted.svg", "w") as fh:
     fh.write(etree.tostring(document))
