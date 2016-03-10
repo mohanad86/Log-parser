@@ -43,3 +43,6 @@ Temporary Items
 .apdisk
 /bin/
 /target/
+GeoIP.dat
+access.log
+
