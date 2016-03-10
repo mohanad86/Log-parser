@@ -1,3 +1,4 @@
+import codecs
 import os
 import urllib
 import gzip
@@ -5,10 +6,17 @@ import argparse
 import gzip
 import GeoIP
 from jinja2 import Environment, FileSystemLoader
-env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)),trim_blocks=True)
+PROJECT_ROOT = os.path.dirname(__file__)
+env = Environment(
+    loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
+    trim_blocks=True)
+#env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)),trim_blocks=True)
 #print env.get_template("report.html").render(variavle="blah")
 gi = GeoIP.open("GeoIP.dat", GeoIP.GEOIP_MEMORY_CACHE)
 parser = argparse.ArgumentParser(description='Apache2 log parser.')
+parser.add_argument('--output',
+    help="This is where we place the output files such as report.html and map.svg",
+    default='build')
 parser.add_argument('--path', help='Path to Apache2 log files', default="/home/malyhass/log-parser")
 parser.add_argument('--top-urls', help="Find top URL-s", action='store_true')
 parser.add_argument('--geoip', help ="Resolve IP-s to country codes", default="/home/malyhass/GeoIP.dat")
@@ -24,7 +32,7 @@ files = []
 users = {}
 countries = {}
 ip_addresses = {}
-user_bytes ={}
+user_bytes = {}
 for filename in os.listdir(args.path):
     if not filename.startswith("access.log"):
         print "Skipping unknown file:", filename
@@ -97,7 +105,10 @@ def humanize(bytes):
 from lxml import etree
 from lxml.cssselect import CSSSelector
  
-document =  etree.parse(open('BlankMap-World6.svg'))
+#document =  etree.parse(open('templates/map.svg'))
+document =  etree.parse(open(os.path.join(PROJECT_ROOT, 'templates', 'map.svg')))
+
+
 
 max_hits = max(countries.values())
 print("country with max amount of hits:", max_hits)
@@ -109,12 +120,19 @@ for country_code, hits in countries.items():
         j.set("style", "fill:#" + hex(hits * 255 / max_hits)[2:] + "0000")
         for i in j.iterfind("{http://www.w3.org/2000/svg}path"):
             i.attrib.pop("class", "")
-user_bytes = sorted(user_bytes.items(), key = lambda item:item[1], reverse=True)
-import codecs
-with codecs.open("output.html", "w", encoding="utf-8") as fh: 
-	fh.write(env.get_template("report.html").render(locals()))
- 
-with open("highlighted.svg", "w") as fh:
+#user_bytes = sorted(user_bytes.items(), key = lambda item:item[1], reverse=True)
+
+context = {
+        "humanize" : humanize,
+        "url_hits" : sorted(urls.items(), key = lambda i:i[1], reverse= True), 
+        "user_bytes":sorted(user_bytes.items(), key = lambda item:item[1], reverse=True)
+ }
+#with codecs.open("output.html", "w", encoding="utf-8") as fh: 
+ #       fh.write(env.get_template("report.html").render(context))
+with codecs.open(os.path.join(args.output, "report.html"), "w", encoding="utf-8") as fh:
+    fh.write(env.get_template("report.html").render(context))
+os.system("x-www-browser file://" + os.path.realpath("build/report.html") + " &")
+with open(os.path.join(args.output, "map.svg"), "w") as fh:
     fh.write(etree.tostring(document))
 for filename in os.listdir("."):
     mode, inode, device, nlink, vid, gid, size, atime, mtime, ctime = os.stat(filename) 
