@@ -108,8 +108,6 @@ from lxml.cssselect import CSSSelector
 #document =  etree.parse(open('templates/map.svg'))
 document =  etree.parse(open(os.path.join(PROJECT_ROOT, 'templates', 'map.svg')))
 
-
-
 max_hits = max(countries.values())
 print("country with max amount of hits:", max_hits)
 for country_code, hits in countries.items():
