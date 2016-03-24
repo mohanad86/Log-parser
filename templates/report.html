@@ -7,11 +7,14 @@
     <link rel="css/style.css" type="text/css"/>
     <script type="text/javascript" src="js/main.js"></script>
   </head>
-  <body>
-      <img src="map.svg"/>
-	<h1>Top bandwidth hoggers</h1>
+  <body>       
+	<h1>Top visiting countries</h1>
+	{{ map_svg }}
 	<ul>
-  	{% for user, bytes in user_bytes %}
+	<h1> Top bandwidth hoggers </h1>
+	<ul>
+  	{% for user, bytes in user_bytes[:5] %}
+  	<li><a href= "http://enos.itcollege.ee/~{{user}}" >{{ user}} </a>: {{ humanize (bytes) }} </li>
 	<li> {{ user }}: {{ humanize(bytes) }} </li>
 	{% endfor %}
     </ul>
