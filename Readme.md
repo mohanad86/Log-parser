@@ -1,4 +1,4 @@
-#Starting with Python codes	
+#Python code here
 - Here you will find simple and complex python codes 
 
 - python codes 
