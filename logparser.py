@@ -1,4 +1,6 @@
 import urllib
+#import pwd
+from collections import Counter
 class LogParser(object):
     def __init__(self, gi, keywords):
         """
@@ -12,9 +14,10 @@ class LogParser(object):
         """
         This function resets the counters of an LogParser instance
         """
+        #self.
         self.total = 0           # Total number of log entries parsed
         self.d = {}              # Hits per keyword
-        self.urls = {}           # Hits per URL
+        self.urls = Counter()          # Hits per URL
         self.user_bytes = {}     # Bytes served per user
         self.countries = {}      # Hits per country code
         self.ip_addresses = {}   # Hits per source IP address
@@ -46,11 +49,13 @@ class LogParser(object):
                     self.user_bytes[username] = self.user_bytes[username] + content_length
                 except:
                     self.user_bytes[username] = content_length
+            self.urls[path] += 1
 
-            try:
-                self.urls[path] = self.urls[path] + 1
-            except:
-                self.urls[path] = 1
+# This is the old version which is slower than update 
+            #try:
+                #self.urls[path] = self.urls[path] + 1
+            #except:
+                #self.urls[path] = 1
 
             for keyword in self.keywords:
                 if keyword in agent:
