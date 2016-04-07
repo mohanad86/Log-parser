@@ -1,10 +1,12 @@
-
 import argparse
 import os
 import GeoIP
 from maprender import render_map
 from logparser import LogParser
-
+from threading import Thread
+import gzip
+import codecs
+from jinja2 import Environment, FileSystemLoader # This it the templating engine we will use
 # This directory should contain main.py and templates
 PROJECT_ROOT = os.path.dirname(__file__)
 
@@ -30,14 +32,15 @@ except GeoIP.error:
     print "Failed to open up GeoIP database, it seems %s does not exist!" % os.path.realpath(args.geoip)
     exit(254)
 
-import gzip
+
 
 # Here we create an instance of the LogParser class
 # this object shall contain statistics for one run
 logparser = LogParser(gi, keywords = ("Windows", "Linux", "OS X"))
+file_handles = []
 
 for filename in os.listdir(args.path):
-    if not filename.startswith("access."):
+    if not filename.startswith("access.log"):
         continue
 
     if filename.endswith(".gz"):
@@ -49,8 +52,21 @@ for filename in os.listdir(args.path):
 
     if args.verbose:
         print "Parsing:", filename
+    file_handles.append(fh)
 
-    logparser.parse_file(fh)
+class ParserThread(Thread):
+    def run(self):
+        while True:
+            try:
+                logparser.parse_file(file_handles.pop())
+            except IndexError:
+                break
+threads = [ParserThread() for j in range(0, 4)]
+for thread in threads:
+    thread.daemon = True 
+    thread.start()
+for thread in threads:
+    thread.join()
 
 if not logparser.urls:
     print "No log entries!"
@@ -67,13 +83,10 @@ def humanize(bytes):
     else:
         return "%.1f GB" % (bytes / 1024.0 ** 3)
 
-from jinja2 import Environment, FileSystemLoader # This it the templating engine we will use
 
 env = Environment(
     loader=FileSystemLoader(os.path.join(PROJECT_ROOT, "templates")),
     trim_blocks=True)
-
-import codecs
 
 # Here we use render_map function from maprender.py to generate colored map
 rendered_map = render_map(
