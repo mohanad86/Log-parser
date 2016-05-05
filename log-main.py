@@ -33,6 +33,8 @@ users = {}
 countries = {}
 ip_addresses = {}
 user_bytes = {}
+if not os.path.exists(args.output):
+    os.makedirs(args.output)
 for filename in os.listdir(args.path):
     if not filename.startswith("access.log"):
         print "Skipping unknown file:", filename
